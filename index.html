@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مكتب المحتوى — M pub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;500;600;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#14171F;
+    --ink-2:#1B1F28;
+    --ink-3:#242A35;
+    --paper:#F3EEDF;
+    --paper-2:#EAE1C7;
+    --gold:#C6A15B;
+    --gold-soft:rgba(198,161,91,0.16);
+    --teal:#4A6E63;
+    --text-light:#ECE6D6;
+    --text-dim:#9BA0AC;
+    --text-dark:#1B1F27;
+    --rule:rgba(236,230,214,0.12);
+    --danger:#C1594F;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--ink);
+    color:var(--text-light);
+    font-family:'Cairo',sans-serif;
+    min-height:100vh;
+    padding-bottom:60px;
+  }
+  ::selection{background:var(--gold-soft);}
+
+  header.masthead{
+    padding:28px 20px 18px;
+    border-bottom:1px solid var(--rule);
+    position:relative;
+  }
+  .masthead-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    gap:12px;
+  }
+  .masthead h1{
+    font-family:'Amiri',serif;
+    font-size:30px;
+    font-weight:700;
+    margin:0;
+    letter-spacing:0.5px;
+    color:var(--text-light);
+  }
+  .masthead-sub{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    color:var(--gold);
+    letter-spacing:1.5px;
+    margin-top:6px;
+  }
+  .dateline{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    color:var(--text-dim);
+    text-align:left;
+    white-space:nowrap;
+  }
+  .masthead-rule{
+    height:3px;
+    background:linear-gradient(90deg, var(--gold) 0%, transparent 100%);
+    margin-top:16px;
+  }
+
+  main{
+    max-width:640px;
+    margin:0 auto;
+    padding:0 20px;
+  }
+
+  section.block{
+    margin-top:28px;
+  }
+  .block-label{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    letter-spacing:2px;
+    color:var(--gold);
+    margin-bottom:10px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .block-label::before{
+    content:"◆";
+    font-size:8px;
+  }
+
+  label.field{
+    display:block;
+    margin-bottom:14px;
+  }
+  label.field span.field-title{
+    display:block;
+    font-size:14px;
+    font-weight:600;
+    color:var(--text-light);
+    margin-bottom:6px;
+  }
+  label.field span.field-hint{
+    display:block;
+    font-size:12px;
+    color:var(--text-dim);
+    margin-bottom:6px;
+    font-weight:400;
+  }
+  textarea, input[type=text], select{
+    width:100%;
+    background:var(--ink-2);
+    border:1px solid var(--rule);
+    color:var(--text-light);
+    border-radius:6px;
+    padding:12px 14px;
+    font-family:'Cairo',sans-serif;
+    font-size:14px;
+    resize:vertical;
+    transition:border-color 0.15s ease;
+  }
+  textarea:focus, input:focus, select:focus{
+    outline:none;
+    border-color:var(--gold);
+  }
+  textarea{min-height:64px;}
+
+  select{
+    appearance:none;
+    -webkit-appearance:none;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C6A15B' stroke-width='2'><path d='M6 9l6 6 6-6'/></svg>");
+    background-repeat:no-repeat;
+    background-position:left 12px center;
+    background-size:16px;
+    padding-left:36px;
+  }
+
+  .chip-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+  .chip{
+    border:1px solid var(--rule);
+    background:var(--ink-2);
+    color:var(--text-dim);
+    border-radius:999px;
+    padding:9px 16px;
+    font-size:13px;
+    font-weight:600;
+    cursor:pointer;
+    user-select:none;
+    transition:all 0.15s ease;
+  }
+  .chip.active{
+    border-color:var(--gold);
+    color:var(--ink);
+    background:var(--gold);
+  }
+  .chip:focus-visible{outline:2px solid var(--gold); outline-offset:2px;}
+
+  .two-col{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+  }
+  @media(max-width:420px){
+    .two-col{grid-template-columns:1fr;}
+  }
+
+  .stamp-wrap{
+    display:flex;
+    justify-content:center;
+    margin:36px 0 8px;
+  }
+  .stamp{
+    width:132px;
+    height:132px;
+    border-radius:50%;
+    border:2px dashed var(--gold);
+    background:transparent;
+    color:var(--gold);
+    font-family:'IBM Plex Mono',monospace;
+    font-size:13px;
+    letter-spacing:2px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    transform:rotate(-4deg);
+    transition:transform 0.2s ease, background 0.2s ease, color 0.2s ease;
+    padding:10px;
+  }
+  .stamp:hover{
+    transform:rotate(0deg) scale(1.03);
+    background:var(--gold-soft);
+  }
+  .stamp:active{transform:rotate(0deg) scale(0.97);}
+  .stamp:disabled{
+    opacity:0.5;
+    cursor:default;
+    transform:rotate(0deg);
+  }
+  .stamp:focus-visible{outline:2px solid var(--gold); outline-offset:4px;}
+  .stamp.loading{
+    animation:spin 1.4s linear infinite;
+  }
+  @keyframes spin{
+    from{transform:rotate(0deg);}
+    to{transform:rotate(360deg);}
+  }
+  .error-msg{
+    text-align:center;
+    color:var(--danger);
+    font-size:13px;
+    margin-top:14px;
+    font-family:'IBM Plex Mono',monospace;
+  }
+
+  #output{
+    margin-top:36px;
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+  }
+  .dispatch{
+    background:var(--paper);
+    color:var(--text-dark);
+    border-radius:4px;
+    overflow:hidden;
+    box-shadow:0 6px 24px rgba(0,0,0,0.28);
+  }
+  .dispatch-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:10px 16px;
+    background:var(--paper-2);
+    border-bottom:1px solid rgba(27,31,39,0.12);
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    letter-spacing:1px;
+    color:var(--text-dark);
+  }
+  .dispatch-head .plat{
+    font-weight:600;
+    color:var(--teal);
+  }
+  .dispatch-body{
+    padding:18px 16px;
+    font-size:15px;
+    line-height:1.8;
+    white-space:pre-wrap;
+  }
+  .dispatch-tags{
+    padding:0 16px 14px;
+    font-size:13px;
+    color:var(--teal);
+    line-height:1.9;
+  }
+  .visual-brief{
+    margin:0 16px 16px;
+    border:1px dashed rgba(74,110,99,0.5);
+    border-radius:4px;
+    padding:12px 14px;
+    background:rgba(74,110,99,0.06);
+  }
+  .visual-brief-label{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10px;
+    letter-spacing:1.5px;
+    color:var(--teal);
+    margin-bottom:6px;
+    display:flex;
+    align-items:center;
+    gap:6px;
+  }
+  .visual-brief-label::before{
+    content:"▣";
+    font-size:11px;
+  }
+  .visual-brief-text{
+    font-size:13px;
+    line-height:1.8;
+    color:var(--text-dark);
+  }
+  .dispatch-foot{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:10px 16px;
+    border-top:1px dashed rgba(27,31,39,0.18);
+  }
+  .charcount{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    color:#6b6656;
+  }
+  .copy-btn{
+    background:var(--ink);
+    color:var(--gold);
+    border:none;
+    border-radius:4px;
+    padding:7px 14px;
+    font-family:'Cairo',sans-serif;
+    font-size:12px;
+    font-weight:600;
+    cursor:pointer;
+  }
+  .copy-btn:hover{background:var(--ink-2);}
+  .copy-btn.copied{color:#8FBF9F;}
+
+  footer.note{
+    max-width:640px;
+    margin:40px auto 0;
+    padding:0 20px;
+    font-size:11px;
+    color:var(--text-dim);
+    font-family:'IBM Plex Mono',monospace;
+    text-align:center;
+  }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="masthead-top">
+    <div>
+      <h1>مكتب المحتوى</h1>
+      <div class="masthead-sub">M PUB — وكالة إعلان وتسويق</div>
+    </div>
+    <div class="dateline" id="dateline"></div>
+  </div>
+  <div class="masthead-rule"></div>
+</header>
+
+<main>
+
+  <section class="block">
+    <div class="block-label">أساس المحتوى</div>
+    <label class="field">
+      <span class="field-title">الموضوع أو الفكرة</span>
+      <span class="field-hint">اختياري — مثلاً: عرض نهاية الصيف، خدمة جديدة، مناسبة معينة</span>
+      <textarea id="topic" placeholder="اكتب الموضوع هنا…"></textarea>
+    </label>
+    <label class="field">
+      <span class="field-title">معلومات عن النشاط أو العميل</span>
+      <span class="field-hint">اختياري — اسم النشاط، طبيعة الخدمة، الجمهور المستهدف…</span>
+      <textarea id="business" placeholder="مثلاً: M pub، وكالة تسويق رقمي في تبسة، تستهدف أصحاب المحلات والأعمال الصغيرة…"></textarea>
+    </label>
+  </section>
+
+  <section class="block">
+    <div class="block-label">تفاصيل النشر</div>
+    <div class="two-col">
+      <label class="field">
+        <span class="field-title">نوع المحتوى</span>
+        <select id="contentType">
+          <option value="منشور عادي">منشور عادي</option>
+          <option value="إعلان مدفوع">إعلان مدفوع</option>
+          <option value="قصة (Story)">قصة (Story)</option>
+          <option value="سكربت ريلز/فيديو قصير">سكربت ريلز قصير</option>
+        </select>
+      </label>
+      <label class="field">
+        <span class="field-title">اللغة</span>
+        <select id="language">
+          <option value="العربية الفصحى">العربية الفصحى</option>
+          <option value="اللهجة الجزائرية">اللهجة الجزائرية</option>
+          <option value="الفرنسية">الفرنسية</option>
+          <option value="مزيج عربي وفرنسي (كما يُستخدم في الجزائر)">مزيج عربي/فرنسي</option>
+          <option value="الإنجليزية">الإنجليزية</option>
+        </select>
+      </label>
+    </div>
+    <label class="field">
+      <span class="field-title">نبرة الكتابة</span>
+      <select id="tone">
+        <option value="احترافية وودودة">احترافية وودودة</option>
+        <option value="جريئة ومباشرة">جريئة ومباشرة</option>
+        <option value="مرحة وخفيفة">مرحة وخفيفة</option>
+        <option value="رسمية">رسمية</option>
+      </select>
+    </label>
+    <label class="field">
+      <span class="field-title">المنصات</span>
+      <span class="field-hint">اختر منصة واحدة أو أكثر</span>
+      <div class="chip-row" id="platforms">
+        <div class="chip" data-value="فيسبوك">فيسبوك</div>
+        <div class="chip" data-value="انستجرام">انستجرام</div>
+        <div class="chip" data-value="تيك توك">تيك توك</div>
+        <div class="chip" data-value="لينكدإن">لينكدإن</div>
+      </div>
+    </label>
+  </section>
+
+  <div class="stamp-wrap">
+    <button class="stamp" id="generateBtn">توليد<br>المحتوى</button>
+  </div>
+  <label class="field" style="max-width:280px;margin:0 auto 8px;">
+    <span class="field-title" style="text-align:center;">كود الدخول</span>
+    <input type="text" id="accessCode" placeholder="أدخل الكود الخاص بك" style="text-align:center;">
+  </label>
+  <div class="error-msg" id="errorMsg" style="display:none;"></div>
+
+  <div id="output"></div>
+
+</main>
+
+<footer class="note">M PUB CONTENT DESK · مولّد بواسطة الذكاء الاصطناعي</footer>
+
+<script>
+const dateline = document.getElementById('dateline');
+const now = new Date();
+dateline.textContent = now.toLocaleDateString('ar-DZ', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
+
+const platformChips = document.querySelectorAll('#platforms .chip');
+platformChips.forEach(chip=>{
+  chip.tabIndex = 0;
+  chip.addEventListener('click', ()=> chip.classList.toggle('active'));
+  chip.addEventListener('keydown', e=>{
+    if(e.key==='Enter' || e.key===' '){ e.preventDefault(); chip.classList.toggle('active'); }
+  });
+});
+
+const generateBtn = document.getElementById('generateBtn');
+const errorMsg = document.getElementById('errorMsg');
+const output = document.getElementById('output');
+
+const platformLimits = {
+  'فيسبوك':'منشور بين 40 و80 كلمة، أسلوب سردي طبيعي، دعوة واضحة للتفاعل في النهاية',
+  'انستجرام':'كابشن بين 30 و60 كلمة، جذاب من أول سطر، مع 6 إلى 8 هاشتاجات مرتبطة بالمجال',
+  'تيك توك':'سكربت قصير بين 40 و70 كلمة يصلح للنطق في فيديو 20-30 ثانية، جمل قصيرة وإيقاع سريع',
+  'لينكدإن':'منشور احترافي بين 60 و100 كلمة، أسلوب تحليلي أو قصة نجاح، بدون هاشتاجات مبالغ فيها'
+};
+
+function setLoading(isLoading){
+  generateBtn.disabled = isLoading;
+  generateBtn.classList.toggle('loading', isLoading);
+  generateBtn.innerHTML = isLoading ? 'جارٍ...' : 'توليد<br>المحتوى';
+}
+
+generateBtn.addEventListener('click', async ()=>{
+  errorMsg.style.display = 'none';
+  const topic = document.getElementById('topic').value.trim();
+  const business = document.getElementById('business').value.trim();
+  const contentType = document.getElementById('contentType').value;
+  const language = document.getElementById('language').value;
+  const tone = document.getElementById('tone').value;
+  const selectedPlatforms = Array.from(document.querySelectorAll('#platforms .chip.active')).map(c=>c.dataset.value);
+
+  if(!topic && !business){
+    errorMsg.textContent = 'اكتب موضوعًا أو معلومات عن النشاط على الأقل';
+    errorMsg.style.display = 'block';
+    return;
+  }
+  if(selectedPlatforms.length===0){
+    errorMsg.textContent = 'اختر منصة واحدة على الأقل';
+    errorMsg.style.display = 'block';
+    return;
+  }
+
+  const accessCode = document.getElementById('accessCode').value.trim();
+  if(!accessCode){
+    errorMsg.textContent = 'أدخل كود الدخول أولاً';
+    errorMsg.style.display = 'block';
+    return;
+  }
+
+  setLoading(true);
+  output.innerHTML = '';
+
+  const platformSpecs = selectedPlatforms.map(p => `- ${p}: ${platformLimits[p]}`).join('\n');
+
+  const systemPrompt = `أنت كاتب محتوى تسويقي محترف. أنشئ محتوى من الصفر بناءً على المعطيات التالية.
+أعد الرد بصيغة JSON فقط، بدون أي مقدمة أو علامات ماركداون أو تعليق، بالشكل التالي بالضبط:
+{"platforms":[{"platform":"اسم المنصة","content":"نص المحتوى","hashtags":"الهاشتاجات إن وجدت أو نص فارغ","visualBrief":"وصف بصري أو نص فارغ"}]}
+اكتب منصة واحدة لكل عنصر في المصفوفة، بنفس الترتيب المطلوب. التزم بحدود الطول المذكورة لكل منصة بدقة.
+لو المنصة "انستجرام": اكتب في visualBrief وصفًا بصريًا تفصيليًا وعمليًا للصورة المرافقة للمنشور، يشمل بالترتيب: الموضوع/العنصر الرئيسي في الصورة، الألوان المقترحة، نوع الإضاءة، زاوية التصوير أو التكوين، أي عناصر نصية أو رسومية تُضاف على الصورة، والنسبة المقترحة (1:1 أو 4:5). اجعله وصفًا يصلح لتوجيه مصمم أو للبحث عن صورة جاهزة مشابهة.
+لأي منصة غير انستجرام: اترك visualBrief نصًا فارغًا "".`;
+
+  const userPrompt = `الموضوع/الفكرة: ${topic || 'غير محدد، استنتجه من معلومات النشاط'}
+معلومات النشاط/العميل: ${business || 'غير محددة'}
+نوع المحتوى: ${contentType}
+اللغة: ${language}
+نبرة الكتابة: ${tone}
+المنصات المطلوبة ومواصفاتها:
+${platformSpecs}`;
+
+  try{
+    const response = await fetch("/api/generate", {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({ systemPrompt, userPrompt, accessCode })
+    });
+    const data = await response.json();
+    if(data.error){
+      throw new Error(data.error);
+    }
+    let text = data.content.map(b=>b.text||'').join('').trim();
+    text = text.replace(/```json|```/g,'').trim();
+    const parsed = JSON.parse(text);
+
+    parsed.platforms.forEach(p=>{
+      const card = document.createElement('div');
+      card.className = 'dispatch';
+      const charCount = (p.content||'').length;
+      card.innerHTML = `
+        <div class="dispatch-head">
+          <span class="plat">${p.platform}</span>
+          <span>${now.toLocaleTimeString('ar-DZ',{hour:'2-digit',minute:'2-digit'})}</span>
+        </div>
+        <div class="dispatch-body">${(p.content||'').replace(/</g,'&lt;')}</div>
+        ${p.hashtags ? `<div class="dispatch-tags">${p.hashtags.replace(/</g,'&lt;')}</div>` : ''}
+        ${p.visualBrief ? `<div class="visual-brief"><div class="visual-brief-label">الوصف البصري للصورة</div><div class="visual-brief-text">${p.visualBrief.replace(/</g,'&lt;')}</div><button class="copy-btn copy-brief" style="margin-top:8px;">نسخ الوصف</button></div>` : ''}
+        <div class="dispatch-foot">
+          <span class="charcount">${charCount} حرف</span>
+          <button class="copy-btn">نسخ</button>
+        </div>
+      `;
+      card.querySelector('.copy-btn').addEventListener('click', (e)=>{
+        const full = p.content + (p.hashtags ? '\n\n' + p.hashtags : '');
+        navigator.clipboard.writeText(full).then(()=>{
+          e.target.textContent = 'تم النسخ';
+          e.target.classList.add('copied');
+          setTimeout(()=>{ e.target.textContent='نسخ'; e.target.classList.remove('copied'); }, 1800);
+        });
+      });
+      const briefBtn = card.querySelector('.copy-brief');
+      if(briefBtn){
+        briefBtn.addEventListener('click', (e)=>{
+          navigator.clipboard.writeText(p.visualBrief).then(()=>{
+            e.target.textContent = 'تم النسخ';
+            e.target.classList.add('copied');
+            setTimeout(()=>{ e.target.textContent='نسخ الوصف'; e.target.classList.remove('copied'); }, 1800);
+          });
+        });
+      }
+      output.appendChild(card);
+    });
+  }catch(err){
+    console.error(err);
+    errorMsg.textContent = err.message || 'حدث خطأ أثناء التوليد. حاول مرة أخرى.';
+    errorMsg.style.display = 'block';
+  }finally{
+    setLoading(false);
+  }
+});
+</script>
+</body>
+</html>
